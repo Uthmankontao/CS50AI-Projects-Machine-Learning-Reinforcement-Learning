@@ -7,16 +7,6 @@ Goal: Predict whether a user visiting an online shopping website will complete a
 
 Method: Implement a k-Nearest Neighbor (k-NN) classifier using scikit-learn.
 
-Dataset: About 12,000 user sessions with features like page views, bounce rates, browser type, weekend/weekday, etc.
-
-Output: The model predicts whether the session ends in a purchase (Revenue = TRUE/FALSE).
-
-Evaluation:
-
-Sensitivity (True Positive Rate) – how many actual purchasers are correctly identified.
-
-Specificity (True Negative Rate) – how many non-purchasers are correctly identified.
-
 📂 Folder: shopping/
 
 shopping.py: main code to load data, train model, and evaluate.
