@@ -20,24 +20,6 @@ Goal: Build an AI that learns to play the game Nim through reinforcement learnin
 
 Method: Implement Q-learning to assign rewards to state-action pairs.
 
-Mechanics:
-
-State = configuration of piles.
-
-Action = removing some objects from a pile.
-
-AI trains by playing against itself and improves over time.
-
-Core Functions to Implement:
-
-get_q_value
-
-update_q_value
-
-best_future_reward
-
-choose_action
-
 📂 Folder: nim/
 
 nim.py: defines game mechanics and AI learning.
@@ -49,5 +31,4 @@ play.py: lets a human play against the trained AI.
 Prerequisites
 
 Python 3
-
 scikit-learn (pip install scikit-learn)
