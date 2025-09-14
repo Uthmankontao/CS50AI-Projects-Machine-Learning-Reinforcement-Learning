@@ -1,6 +1,6 @@
 import csv
 import sys
-
+import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 
@@ -13,22 +13,23 @@ def main():
     if len(sys.argv) != 2:
         sys.exit("Usage: python shopping.py data")
 
-    # Load data from spreadsheet and split into train and test sets
-    evidence, labels = load_data(sys.argv[1])
-    X_train, X_test, y_train, y_test = train_test_split(
-        evidence, labels, test_size=TEST_SIZE
-    )
+    load_data(sys.argv[1])
+    # # Load data from spreadsheet and split into train and test sets
+    # evidence, labels = load_data(sys.argv[1])
+    # X_train, X_test, y_train, y_test = train_test_split(
+    #     evidence, labels, test_size=TEST_SIZE
+    # )
 
-    # Train model and make predictions
-    model = train_model(X_train, y_train)
-    predictions = model.predict(X_test)
-    sensitivity, specificity = evaluate(y_test, predictions)
+    # # Train model and make predictions
+    # model = train_model(X_train, y_train)
+    # predictions = model.predict(X_test)
+    # sensitivity, specificity = evaluate(y_test, predictions)
 
-    # Print results
-    print(f"Correct: {(y_test == predictions).sum()}")
-    print(f"Incorrect: {(y_test != predictions).sum()}")
-    print(f"True Positive Rate: {100 * sensitivity:.2f}%")
-    print(f"True Negative Rate: {100 * specificity:.2f}%")
+    # # Print results
+    # print(f"Correct: {(y_test == predictions).sum()}")
+    # print(f"Incorrect: {(y_test != predictions).sum()}")
+    # print(f"True Positive Rate: {100 * sensitivity:.2f}%")
+    # print(f"True Negative Rate: {100 * specificity:.2f}%")
 
 
 def load_data(filename):
@@ -59,7 +60,43 @@ def load_data(filename):
     labels should be the corresponding list of labels, where each label
     is 1 if Revenue is true, and 0 otherwise.
     """
-    raise NotImplementedError
+    # raise NotImplementedError
+
+    with open(filename) as f:
+        reader = csv.reader(f)
+        next(reader)
+        data = []
+
+        for row in reader:
+            data.append({
+            "evidence": row[:17],
+            "label": 1 if row[-1] == "TRUE" else 0
+        })
+        
+        months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        evidence, label = [], []
+        for _ in range(len(data)):
+            for i in [1, 3, 5, 6, 7, 8, 9]:
+                data[_]["evidence"][i] = float(data[_]["evidence"][i])
+            
+            if data[_]["evidence"][10] in months:
+                data[_]["evidence"][10] = months.index(data[_]["evidence"][10])
+            else:
+                continue
+                
+            if data[_]["evidence"][-2] == "Returning_Visitor":
+                data[_]["evidence"][-2] = 1
+            else:
+                data[_]["evidence"][-2] = 0
+
+            if data[_]["evidence"][-1] == "TRUE":
+                data[_]["evidence"][-1] = 1
+            else: 
+                data[_]["evidence"][-1] = 0
+            evidence.append(data[_]["evidence"])
+            label.append(data[_]["label"])
+
+        return (evidence, label)
 
 
 def train_model(evidence, labels):
