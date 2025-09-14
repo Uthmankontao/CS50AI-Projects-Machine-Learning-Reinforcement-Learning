@@ -74,7 +74,7 @@ def load_data(filename):
         })
         
         months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-        evidence, label = [], []
+        evidence, labels = [], []
         for _ in range(len(data)):
             for i in [1, 3, 5, 6, 7, 8, 9]:
                 data[_]["evidence"][i] = float(data[_]["evidence"][i])
@@ -94,9 +94,9 @@ def load_data(filename):
             else: 
                 data[_]["evidence"][-1] = 0
             evidence.append(data[_]["evidence"])
-            label.append(data[_]["label"])
+            labels.append(data[_]["label"])
 
-        return (evidence, label)
+        return (evidence, labels)
 
 
 def train_model(evidence, labels):
@@ -104,7 +104,10 @@ def train_model(evidence, labels):
     Given a list of evidence lists and a list of labels, return a
     fitted k-nearest neighbor model (k=1) trained on the data.
     """
-    raise NotImplementedError
+    # raise NotImplementedError
+    model = KNeighborsClassifier(k=1)
+    model.fit(evidence, labels)
+
 
 
 def evaluate(labels, predictions):
@@ -122,7 +125,7 @@ def evaluate(labels, predictions):
     representing the "true negative rate": the proportion of
     actual negative labels that were accurately identified.
     """
-    raise NotImplementedError
+    # raise NotImplementedError
 
 
 if __name__ == "__main__":
