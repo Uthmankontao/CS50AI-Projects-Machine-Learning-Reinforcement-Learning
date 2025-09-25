@@ -12,15 +12,15 @@ import matplotlib.pyplot as plt
 
 class Bandit:
     
-    def __init__(self):
-        self.K=10 # on crée un bandit avec 10 bras --> les 10 leviers du bandit manchot
-        np.random.seed(5) # pour obtr tjr le meme rslt.
-        self.variance = np.random.randint(-1,2,size=self.K) # ensuite dans un tbl de taille = au nbre de bras on mets
-        # aleatoirement des valeurs entieres entre -1 et 1
+    def __init__(self, K= 10, seed = None):
+        self.K=K # on crée un bandit avec 10 bras --> les 10 leviers du bandit manchot
+        if seed is not None:
+            np.random.seed(seed)
+        self.variance = np.random.randint(-1,2,size=self.K)
         self.biais = np.random.poisson(3,self.K) # tableau de taille 10 tiré d'une loi poisson  de taille 3. cela fixe un biais de recompense pour chaque bras
         while sum(self.biais == self.biais.max()) != 1 : # force la condition qu’un seul bras a le biais maximum (pas plusieurs)
             self.biais = np.random.poisson(3,self.K)
-  
+        self.means = 6 + self.variance + self.biais
     def get_arm(self,k):
         """simule la recompense quand on tire le bras k.
         La récompense est un nombre aléatoire tiré d’une
@@ -28,6 +28,14 @@ class Bandit:
 
         reward  = np.random.poisson(6+self.variance[k]) + self.biais[k]
         return reward
+    
+    def optimal_mean(self):
+        return np.max(self.means)
+    
+    def optimal_arm(self):
+        return int(np.argmax(self.means))
+    
+    
 
 
 if __name__ == "__main__":
